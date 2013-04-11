@@ -25,7 +25,8 @@ def weechat_init
   Weechat.hook_print '', '', '', 0,
     'print_hook', ''
 
-  @buffer = Weechat.buffer_new 'ServerMon', '', '', '', ''
+  @buffer = Weechat.buffer_new 'ServerMon',
+    '', '', '', ''
 
   Weechat.buffer_set @buffer,
     'title', 'Server Monitor'
@@ -36,12 +37,10 @@ end
 def print_hook data, buffer, date, tags,
   displayed, highlight, prefix, message
   
-  unless Weechat.buffer_get_string(buffer, 'name').start_with? 'server.'
-    return Weechat::WEECHAT_RC_OK
+  if Weechat.buffer_get_string(buffer, 'name').start_with? 'server.'
+    Weechat.print @buffer,
+      "#{prefix}\t#{message}"
   end
-
-  Weechat.print @buffer,
-    "#{prefix}\t#{message}"
 
   Weechat::WEECHAT_RC_OK
 end
